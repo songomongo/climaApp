@@ -1,48 +1,78 @@
-import React from "react";
-import{ Image, StyleSheet, Text, View} from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, View } from 'react-native';
 function App(): React.JSX.Element {
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.city}>Presidente Epitacio</Text>
 
-        </View>
+  const [city, setCity] = useState<string>("São Paulo")
+  const [humidity, setHumidity] = useState<string>("15")
+  const [condition, setCondition] = useState<string>("Ensolarado")
+  const [rainProbability, setRainprobability] = useState<string>("30")
+  const [feelsLike, setFeelslike] = useState<string>("41")
+  const [temperature, setTemperature] = useState<string>("37")
+  const [night, setNight] = useState<boolean>(false)
 
-          <View style={styles.detailsContainer}>
-            <Text style={styles.temperature}>55 °c</Text>
-              <Image source={require('./src/assets/images/icon3.png')}
-              style={styles.weatherIcon} />
+  function isNight() {
 
-          </View>
+    const hour = new Date().getHours();
+    console.log(hour);
 
-              <View>
+    if (hour >= 18 || hour < 6) {
+      setNight(true);
+    } else {
+      setNight(false);
+    }
+  }
 
-                  <Text style={styles.weatherCondition}>Nublado</Text>
-                  <Text style={styles.text}>Sensação Térmica: 179 °c</Text>
-                  <Text style={styles.text}>Probabilidade de chuva: 78%</Text>
-                  <Text style={styles.text}>NUmidade: 99% </Text>
+  useEffect(() => {
 
-             </View>
-              <Image source={require('./src/assets/images/cidade.png')}
-              style={styles.bottomImage}/>
+    const intervalId = setInterval(() => {
+      isNight();
+    }, 6000);
+  })
+
+  return (
+    <View style={[styles.container, night == false ? styles.containerBgDay : styles.containerBgNight
+      ]}>
+      <View style={styles.header}>
+        <Text style={styles.city}>{city}</Text>
+
+
       </View>
-    );
+
+      <View style={styles.detailsContainer}>
+        <Text style={styles.temperature}>{temperature}</Text>
+        <Image source={require('./src/assets/images/icon3.png')}
+          style={styles.weatherIcon} />
+
+      </View>
+
+      <View>
+
+        <Text style={styles.weatherCondition}>{condition}</Text>
+        <Text style={styles.text}>Sensação Térmica: {feelsLike}</Text>
+        <Text style={styles.text}>Probabilidade de chuva: {rainProbability}</Text>
+        <Text style={styles.text}>NUmidade: {humidity} </Text>
+
+      </View>
+      <Image source={require('./src/assets/images/cidade.png')}
+        style={styles.bottomImage} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   bottomImage: {
 
-      width: '115%',
-      position: 'absolute',
-      bottom: 0,
-      resizeMode: 'cover',
-      height: '57%'
+    width: '115%',
+    position: 'absolute',
+    bottom: 0,
+    resizeMode: 'cover',
+    height: '57%'
 
   },
   header: {
 
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     marginBottom: 20
 
   },
@@ -53,51 +83,63 @@ const styles = StyleSheet.create({
     fontSize: 25
 
   },
-  weatherIcon:{
+  weatherIcon: {
 
     width: 100,
     height: 100,
     alignSelf: 'flex-end',
     marginBottom: 20,
     flexDirection: 'row'
-    
+
   },
   detailsContainer: {
 
     flexDirection: 'row',
     justifyContent: 'space-between'
 
-    
+
   },
   weatherCondition: {
 
-      fontSize: 18,
-      fontWeight: 'bold',
-      alignSelf: 'flex-end',
-      marginBottom: 20,
-      color: '#fff'
+    fontSize: 18,
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+    color: '#fff'
 
   },
   temperature: {
 
-      fontSize: 55,
-      marginBottom:  20,                                         
-      color: '#fff'
+    fontSize: 55,
+    marginBottom: 20,
+    color: '#fff'
 
   },
   container: {
 
-      flex: 1,
-      padding: 20,
-      backgroundColor: '#09d3f3'
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#09849970'
 
   },
   text: {
 
-      fontSize: 17,
-      color: '#fff',
-      marginBottom: 10,
-      fontStyle: 'italic'
+    fontSize: 17,
+    color: '#fff',
+    marginBottom: 10,
+    fontStyle: 'italic'
+
+  },
+
+  containerBgDay: {
+
+    backgroundColor: '#09849970',
+
+  },
+
+  containerBgNight: {
+
+    backgroundColor: '#333',
 
   }
 
